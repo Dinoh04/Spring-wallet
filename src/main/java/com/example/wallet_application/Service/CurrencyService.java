@@ -19,4 +19,14 @@ public class CurrencyService {
     public List<Currency> FindAllCurrency() throws SQLException {
         return repository.findAll();
     }
+    public Currency Save(Currency tosave) throws SQLException {
+        return repository.save(tosave);
+    }
+    public  List<Currency> SaveAll(List<Currency> toSave) throws  SQLException{
+        return  repository.saveAll(toSave);
+    }
+
+    public void Delete(int todelete) throws  SQLException{
+        repository.delete(todelete);
+    }
 }
