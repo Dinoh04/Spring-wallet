@@ -14,9 +14,7 @@ public class DataBaseConfiguration {
     public Connection getConnection() throws SQLException {
 
         return DriverManager.getConnection(
-          "jdbc:postgresql://localhost:5432/wallet_application",
-                "postgres",
-                "virgil04"
+                System.getenv("JDBC_DATABASE_URL"), System.getenv("JDBC_DATABASE_USERNAME"), System.getenv("JDBC_DATABASE_PASSWORD")
         );
     }
 }
