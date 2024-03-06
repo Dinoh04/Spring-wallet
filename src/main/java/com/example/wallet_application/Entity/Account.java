@@ -8,11 +8,11 @@ public class Account {
     private int idaccounts;
     private String accountsname;
     private double accountsbalance;
-    private LocalDate lastupdate;
+    private Timestamp lastupdate;
     private AccounType accounType;
     private int idcurrency;
 
-    public Account(int idaccounts, String accountsname, double accountsbalance, LocalDate lastupdate, AccounType accounType, int idcurrency) {
+    public Account(int idaccounts, String accountsname, double accountsbalance, Timestamp lastupdate, AccounType accounType, int idcurrency) {
         this.idaccounts = idaccounts;
         this.accountsname = accountsname;
         this.accountsbalance = accountsbalance;
@@ -45,11 +45,11 @@ public class Account {
         this.accountsbalance = accountsbalance;
     }
 
-    public LocalDate getLastupdate() {
+    public Timestamp getLastupdate() {
         return lastupdate;
     }
 
-    public void setLastupdate(LocalDate lastupdate) {
+    public void setLastupdate(Timestamp lastupdate) {
         this.lastupdate = lastupdate;
     }
 

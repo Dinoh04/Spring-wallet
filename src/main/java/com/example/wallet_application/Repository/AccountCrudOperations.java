@@ -3,11 +3,13 @@ package com.example.wallet_application.Repository;
 import com.example.wallet_application.Entity.AccounType;
 import com.example.wallet_application.Entity.Account;
 import com.example.wallet_application.Entity.Currency;
+import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class AccountCrudOperations implements CrudOperations<Account>{
 
     private Connection connection;
@@ -19,7 +21,7 @@ public class AccountCrudOperations implements CrudOperations<Account>{
     @Override
     public List<Account> findAll() throws SQLException {
         List<Account> allAccount = new ArrayList<>();
-        String sql = "SELECT * FROM Account";
+        String sql = "SELECT * FROM Accounts";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
@@ -27,7 +29,7 @@ public class AccountCrudOperations implements CrudOperations<Account>{
                         resultSet.getInt("idaccounts"),
                         resultSet.getString("accountsname"),
                         resultSet.getDouble("accountsbalance"),
-                        resultSet.getDate("lastUpdate").toLocalDate(),
+                        resultSet.getTimestamp("lastUpdate"),
                         AccounType.valueOf(resultSet.getString("AccountType")),
                         resultSet.getInt("idCurrency")
 
@@ -49,36 +51,20 @@ public class AccountCrudOperations implements CrudOperations<Account>{
 
     @Override
     public Account save(Account toSave) throws SQLException {
-        if (false) {
-            // If ID is null, do an insert
+
+
             String insertSql = "INSERT INTO Accounts (accountsName, accountsBalance, lastUpdate, idCurrency, accountType) VALUES (?, ?, ?, ?, ?)";
-            try (PreparedStatement insertStatement = connection.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS)) {
+            try (PreparedStatement insertStatement = connection.prepareStatement(insertSql)) {
                 insertStatement.setString(1, toSave.getAccountsname());
                 insertStatement.setDouble(2, toSave.getAccountsbalance());
-                insertStatement.setDate(3, Date.valueOf(toSave.getLastupdate()));
+                insertStatement.setTimestamp(3, toSave.getLastupdate());
                 insertStatement.setInt(4, toSave.getIdcurrency());
                 insertStatement.setObject(5, toSave.getAccounType(), Types.OTHER);
                 insertStatement.executeUpdate();
 
-                try (ResultSet generatedKeys = insertStatement.getGeneratedKeys()) {
-                    if (generatedKeys.next()) {
-                        toSave.getIdaccounts(generatedKeys.getInt(1));
-                    }
-                }
+
             }
-        } else {
-            // if idAccounts  is not null, do an update
-            String updateSql = "UPDATE Accounts SET accountsName = ?, accountsBalance = ?, lastUpdate = ?, idCurrency = ?, accountType = ? WHERE idAccounts = ?";
-            try (PreparedStatement updateStatement = connection.prepareStatement(updateSql)) {
-                updateStatement.setString(1, toSave.getAccountsname());
-                updateStatement.setDouble(2, toSave.getAccountsbalance());
-                updateStatement.setDate(3, Date.valueOf(toSave.getLastupdate()));
-                updateStatement.setInt(4, toSave.getIdcurrency());
-                updateStatement.setObject(5, toSave.getAccounType(), Types.OTHER);
-                updateStatement.setInt(6, toSave.getIdaccounts());
-                updateStatement.executeUpdate();
-            }
-        }
+
 
         return toSave;
     }
